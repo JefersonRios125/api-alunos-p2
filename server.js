@@ -13,8 +13,15 @@ const PORT = 3004;
 
 app.use(express.json());
 
+// Exibir os dados do autor
 app.get('/', (req, res) => {
-    res.send('Nova API de alunos funcionando!');
+    res.json({
+        mensagem: 'API feita por: Jeferson Rios Pereira, RA: SEU_RA',
+        nome: 'Jeferson Rios Pereira',
+        ra: 'SEU_RA',
+        curso: 'Análise e Desenvolvimento de Sistemas',
+        turma: '5º semestre - Noite'
+    });
 });
 
 // Cadastrar usuário
@@ -60,7 +67,7 @@ app.post('/usuarios', async (req, res) => {
     }
 });
 
-// Fazer login
+// Fazer login e gerar token
 app.post('/login', async (req, res) => {
     try {
         const { email, senha } = req.body || {};
@@ -136,9 +143,10 @@ function autenticar(req, res, next) {
     }
 }
 
-// Todas as rotas abaixo de /alunos exigem token
+// Proteger todas as rotas de alunos
 app.use('/alunos', autenticar);
 
+// Validar os campos do aluno
 function camposAlunoValidos(dados) {
     const { nome, ra, curso, turma } = dados || {};
 
@@ -249,6 +257,7 @@ app.delete('/alunos/:id', async (req, res) => {
     }
 });
 
+// Conectar ao MongoDB e iniciar a API
 async function iniciarServidor() {
     try {
         if (!process.env.MONGO_URL) {
