@@ -16,9 +16,9 @@ app.use(express.json());
 // Exibir os dados do autor
 app.get('/', (req, res) => {
     res.json({
-        mensagem: 'API feita por: Jeferson Rios Pereira, RA: SEU_RA',
+        mensagem: 'API feita por: Jeferson Rios Pereira, RA: 2456182',
         nome: 'Jeferson Rios Pereira',
-        ra: 'SEU_RA',
+        ra: '2456182',
         curso: 'Análise e Desenvolvimento de Sistemas',
         turma: '5º semestre - Noite'
     });
