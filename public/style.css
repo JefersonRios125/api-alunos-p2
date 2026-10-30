@@ -1,0 +1,260 @@
+/* Interface da API de alunos — paleta azul e cinza */
+:root {
+    color-scheme: light;
+    --fundo: #eef2f6;
+    --painel: #ffffff;
+    --campo: #f8fafc;
+    --borda: #cbd5e1;
+    --texto: #243b53;
+    --secundario: #52677d;
+    --azul: #2563a6;
+    --azul-claro: #b8d6f0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    min-height: 100vh;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 56px 24px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--texto);
+    background: radial-gradient(ellipse at top right, #dce8f3 0, transparent 55%), var(--fundo);
+}
+
+h1 {
+    margin: 0 0 12px;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+}
+
+h1::before {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 5px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background: #357abd;
+}
+
+h2 { margin: 0 0 18px; font-size: 1.25rem; }
+body > p { color: var(--secundario); margin: 0 0 24px; }
+
+section {
+    margin: 24px 0;
+    padding: 30px;
+    border: 1px solid var(--borda);
+    border-radius: 18px;
+    background: var(--painel);
+    box-shadow: 0 18px 48px #243b5310;
+}
+
+#acesso { max-width: 560px; margin: 32px auto; }
+
+label {
+    display: block;
+    margin-top: 18px;
+    color: #334e68;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+    min-height: 48px;
+    margin: 7px 0 0;
+    padding: 12px 14px;
+    border: 1px solid var(--borda);
+    border-radius: 9px;
+    background: var(--campo);
+    color: var(--texto);
+    font: inherit;
+    transition: border-color 150ms, box-shadow 150ms;
+}
+
+input::placeholder { color: #64788d; }
+input:hover { border-color: #829ab1; }
+input:focus-visible {
+    outline: none;
+    border-color: #357abd;
+    box-shadow: 0 0 0 3px #357abd25;
+}
+
+button {
+    min-height: 46px;
+    margin: 20px 8px 0 0;
+    padding: 11px 19px;
+    border: 1px solid #357abd;
+    border-radius: 9px;
+    background: var(--azul);
+    color: #fff;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 150ms, border-color 150ms;
+}
+
+button:hover { background: #1d4f82; border-color: #1d4f82; }
+button:focus-visible { outline: 3px solid #b8d6f0; outline-offset: 4px; }
+button:disabled { opacity: 0.55; cursor: wait; }
+
+#cadastrar-usuario, #atualizar, #sair {
+    background: #e7eff7;
+    border-color: #b6c9dc;
+    color: #234e73;
+}
+
+#cadastrar-usuario:hover, #atualizar:hover, #sair:hover { background: #d7e5f2; }
+#sair { display: block; margin: 0 0 24px auto; }
+#form-aluno { margin-bottom: 32px; }
+#atualizar { margin-top: 0; }
+
+#mensagem {
+    margin: 20px 0;
+    padding: 14px 18px;
+    border: 1px solid #a8c6e2;
+    border-left: 4px solid #357abd;
+    border-radius: 9px;
+    background: #e8f1f9;
+    color: #234e73;
+    font-weight: 500;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+#mensagem:empty { display: none; }
+#caixa { margin-top: 20px; color: var(--secundario); }
+
+article {
+    margin: 12px 0;
+    padding: 18px 20px;
+    border: 1px solid var(--borda);
+    border-left: 3px solid #357abd;
+    border-radius: 10px;
+    background: #f5f8fb;
+    color: var(--texto);
+    overflow-wrap: anywhere;
+}
+
+article p { margin: 0; line-height: 1.8; }
+[hidden] { display: none !important; }
+
+@media (max-width: 600px) {
+    body { padding: 30px 16px; }
+    section { padding: 22px 18px; border-radius: 13px; }
+    button { width: 100%; margin-right: 0; }
+    #sair { width: auto; }
+    article { padding: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    input, button { transition: none; }
+}
+
+/* Degradê e cartões flutuantes */
+body {
+    background: linear-gradient(135deg, #dce6f0 0%, #b8cce0 42%, #7297bd 100%);
+    background-attachment: fixed;
+}
+
+section {
+    position: relative;
+    background: #f8fafc;
+    border: 1px solid #ffffff;
+    box-shadow: 0 24px 55px #234e7330, 0 6px 16px #243b531a;
+}
+
+#acesso {
+    animation: flutuar 6s ease-in-out infinite;
+}
+
+#painel {
+    animation: surgir 400ms ease-out both;
+}
+
+input, select, textarea {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    margin: 7px 0 0;
+    border: 2px solid #829ab1;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #243b53;
+    font: inherit;
+    box-shadow: inset 0 1px 3px #243b530d;
+}
+
+select { appearance: auto; cursor: pointer; }
+select option { background: #ffffff; color: #243b53; }
+
+input[type="checkbox"], input[type="radio"] {
+    display: inline-block;
+    appearance: auto;
+    width: 20px;
+    height: 20px;
+    min-height: 0;
+    margin: 0 8px 0 0;
+    padding: 0;
+    vertical-align: middle;
+    accent-color: #2563a6;
+    box-shadow: none;
+}
+
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 3px solid #357abd40;
+    outline-offset: 2px;
+    border-color: #2563a6;
+}
+
+button {
+    display: inline-block;
+    min-height: 48px;
+    background: linear-gradient(135deg, #357abd, #1d4f82);
+    color: #ffffff;
+    border: 2px solid #1d4f82;
+    box-shadow: 0 5px 12px #2563a630;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #28679f, #173e67);
+    border-color: #173e67;
+}
+
+#cadastrar-usuario, #atualizar, #sair {
+    background: #dce8f3;
+    color: #1d4f82;
+    border: 2px solid #6b8eaf;
+    box-shadow: 0 4px 10px #243b5314;
+}
+
+#cadastrar-usuario:hover, #atualizar:hover, #sair:hover {
+    background: #c6d9eb;
+    border-color: #2563a6;
+}
+
+@keyframes flutuar {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+@keyframes surgir {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #acesso, #painel { animation: none; }
+}
+
+[hidden] { display: none !important; }
+
+#form-busca { margin: 18px 0; padding: 18px; background: #e7eff7; border: 1px solid #b6c9dc; border-radius: 10px; }
+#form-busca label { margin-top: 0; }

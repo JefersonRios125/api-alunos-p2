@@ -4,6 +4,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const path = require('path');
 
 const Usuario = require('./Usuario');
 const Aluno = require('./Aluno');
@@ -11,9 +13,24 @@ const Aluno = require('./Aluno');
 const app = express();
 const PORT = 3004;
 
+// Permitir acesso pelo Live Server e pela própria API.
+app.use(cors({
+    origin: [
+        'http://localhost:5500',
+        'http://127.0.0.1:5500',
+        'http://localhost:3004',
+        'http://127.0.0.1:3004'
+    ],
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
-// Exibir os dados do autor
+// Disponibilizar HTML, CSS e JavaScript.
+app.use('/app', express.static(path.join(__dirname, 'public')));
+
+// Dados do autor.
 app.get('/', (req, res) => {
     res.json({
         mensagem: 'API feita por: Jeferson Rios Pereira, RA: 2456182',
@@ -24,7 +41,7 @@ app.get('/', (req, res) => {
     });
 });
 
-// Cadastrar usuário
+// Cadastrar usuário — rota preservada no backend.
 app.post('/usuarios', async (req, res) => {
     try {
         const { nome, email, senha } = req.body || {};
@@ -67,7 +84,7 @@ app.post('/usuarios', async (req, res) => {
     }
 });
 
-// Fazer login e gerar token
+// Login — rota preservada no backend.
 app.post('/login', async (req, res) => {
     try {
         const { email, senha } = req.body || {};
@@ -112,7 +129,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Validar token
+// Validar token nas operações que continuam protegidas.
 function autenticar(req, res, next) {
     const autorizacao = req.headers.authorization || '';
     const partes = autorizacao.split(' ');
@@ -143,10 +160,17 @@ function autenticar(req, res, next) {
     }
 }
 
-// Proteger todas as rotas de alunos
-app.use('/alunos', autenticar);
+// GET e POST de alunos funcionam sem login.
+// PUT e DELETE continuam protegidos.
+app.use('/alunos', (req, res, next) => {
+    if (req.method === 'GET' || req.method === 'POST') {
+        return next();
+    }
 
-// Validar os campos do aluno
+    return autenticar(req, res, next);
+});
+
+// Validar os campos obrigatórios.
 function camposAlunoValidos(dados) {
     const { nome, ra, curso, turma } = dados || {};
 
@@ -155,10 +179,46 @@ function camposAlunoValidos(dados) {
     );
 }
 
-// Consultar alunos
+// GET: listar todos ou buscar por nome e RA.
 app.get('/alunos', async (req, res) => {
     try {
-        const alunos = await Aluno.find();
+        const busca = typeof req.query.busca === 'string'
+            ? req.query.busca.trim()
+            : '';
+
+        if (busca.length > 100) {
+            return res.status(400).json({
+                mensagem: 'A busca deve ter no máximo 100 caracteres.'
+            });
+        }
+
+        // Tratar caracteres especiais como texto literal.
+        const textoSeguro = busca.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            '\\$&'
+        );
+
+        const filtro = busca
+            ? {
+                $or: [
+                    {
+                        nome: {
+                            $regex: textoSeguro,
+                            $options: 'i'
+                        }
+                    },
+                    {
+                        ra: {
+                            $regex: textoSeguro,
+                            $options: 'i'
+                        }
+                    }
+                ]
+            }
+            : {};
+
+        const alunos = await Aluno.find(filtro);
+
         res.json(alunos);
     } catch (error) {
         res.status(500).json({
@@ -167,7 +227,7 @@ app.get('/alunos', async (req, res) => {
     }
 });
 
-// Cadastrar aluno
+// POST: cadastrar aluno.
 app.post('/alunos', async (req, res) => {
     try {
         if (!camposAlunoValidos(req.body)) {
@@ -193,7 +253,7 @@ app.post('/alunos', async (req, res) => {
     }
 });
 
-// Atualizar aluno
+// PUT: rota original preservada, com autenticação.
 app.put('/alunos/:id', async (req, res) => {
     try {
         if (!mongoose.isObjectIdOrHexString(req.params.id)) {
@@ -230,7 +290,7 @@ app.put('/alunos/:id', async (req, res) => {
     }
 });
 
-// Excluir aluno
+// DELETE: rota original preservada, com autenticação.
 app.delete('/alunos/:id', async (req, res) => {
     try {
         if (!mongoose.isObjectIdOrHexString(req.params.id)) {
@@ -257,7 +317,7 @@ app.delete('/alunos/:id', async (req, res) => {
     }
 });
 
-// Conectar ao MongoDB e iniciar a API
+// Conectar ao banco e iniciar o servidor.
 async function iniciarServidor() {
     try {
         if (!process.env.MONGO_URL) {
@@ -275,7 +335,8 @@ async function iniciarServidor() {
         console.log('MongoDB conectado ao banco nova_api_alunos');
 
         app.listen(PORT, () => {
-            console.log(`Servidor ligado em http://localhost:${PORT}`);
+            console.log(`API: http://localhost:${PORT}`);
+            console.log(`Página: http://localhost:${PORT}/app/`);
         });
     } catch (error) {
         console.error('Erro ao iniciar:', error.message);

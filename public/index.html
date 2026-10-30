@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API de alunos — Jeferson</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Gerenciamento de alunos</h1>
+    <!--Interface do mural adaptada para consumir a API com fetch, sem login.-->
+    <p id="mensagem" role="status" aria-live="polite"></p>
+    <section id="painel">
+        <h2 id="titulo-form">Cadastrar aluno</h2>
+        <form id="form-aluno"> <!--Adaptação dos campos necessários para a api utilizando os quatro campos obrigatórios-->
+            <label for="nome">Nome</label><input id="nome" required>
+            <label for="ra">RA</label><input id="ra" required>
+            <label for="curso">Curso</label><input id="curso" required>
+            <label for="turma">Turma / semestre</label><input id="turma" required placeholder="Ex.: 4º semestre - Noite">
+            <button id="salvar" type="submit">Cadastrar aluno</button>
+        </form>
+        <h2>Alunos cadastrados</h2>
+        <form id="form-busca" role="search"> <!-- Acrescentado a busca e mantendo a área que recebe os resultados:-->
+            <label for="busca">Buscar aluno por nome ou RA</label>
+            <input id="busca" type="search" placeholder="Digite o nome ou RA" maxlength="100">
+            <button type="submit">Buscar</button>
+        </form>
+        <button id="atualizar" type="button">Mostrar todos</button>
+        <div id="caixa"></div>
+    </section>
+    <script src="main.js"></script>
+</body>
+</html>
