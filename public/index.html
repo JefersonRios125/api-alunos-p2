@@ -8,7 +8,17 @@
 </head>
 <body>
     <h1>Gerenciamento de alunos</h1>
-    <!--Interface do mural adaptada para consumir a API com fetch, sem login.-->
+    <section aria-label="Autenticação">
+        <form id="form-login">
+            <label for="email">E-mail</label>
+            <input id="email" type="email" autocomplete="username" required>
+            <label for="senha">Senha</label>
+            <input id="senha" type="password" autocomplete="current-password" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <p id="status-login" aria-live="polite">Entre para cadastrar, editar ou excluir alunos.</p>
+        <button id="sair" type="button" hidden>Sair</button>
+    </section>
     <p id="mensagem" role="status" aria-live="polite"></p>
     <section id="painel">
         <h2 id="titulo-form">Cadastrar aluno</h2>
@@ -18,6 +28,7 @@
             <label for="curso">Curso</label><input id="curso" required>
             <label for="turma">Turma / semestre</label><input id="turma" required placeholder="Ex.: 4º semestre - Noite">
             <button id="salvar" type="submit">Cadastrar aluno</button>
+            <button id="cancelar-edicao" type="button" hidden>Cancelar edição</button>
         </form>
         <h2>Alunos cadastrados</h2>
         <form id="form-busca" role="search"> <!-- Acrescentado a busca e mantendo a área que recebe os resultados:-->

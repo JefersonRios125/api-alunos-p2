@@ -21,7 +21,7 @@ app.use(cors({
         'http://localhost:3004',
         'http://127.0.0.1:3004'
     ],
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
@@ -160,10 +160,9 @@ function autenticar(req, res, next) {
     }
 }
 
-// GET e POST de alunos funcionam sem login.
-// PUT e DELETE continuam protegidos.
+// A consulta é pública. Cadastro, edição e exclusão exigem token.
 app.use('/alunos', (req, res, next) => {
-    if (req.method === 'GET' || req.method === 'POST') {
+    if (req.method === 'GET' || req.method === 'HEAD') {
         return next();
     }
 
